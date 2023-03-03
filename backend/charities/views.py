@@ -12,7 +12,15 @@ from charities.serializers import (
 
 
 class BenefactorRegistration(APIView):
-    pass
+    def post(self, request):
+        benefactor_serializer = BenefactorSerializer(data=request.data)
+        
+        if benefactor_serializer.is_valid():
+            benefactor_serializer.save(user=request.user)
+            return Response(status=status.HTTP_201_CREATED)
+        
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class CharityRegistration(APIView):
