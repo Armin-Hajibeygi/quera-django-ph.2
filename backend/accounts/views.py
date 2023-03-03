@@ -19,4 +19,12 @@ class LogoutAPIView(APIView):
 
 
 class UserRegistration(APIView):
-    pass
+    def post(self, request):
+        user_serializer = UserSerializer(data=request.data)
+        
+        if (user_serializer.is_valid()):
+            user_serializer.save()
+            return Response(status=status.HTTP_201_CREATED)
+
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
