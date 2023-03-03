@@ -24,7 +24,15 @@ class BenefactorRegistration(APIView):
 
 
 class CharityRegistration(APIView):
-    pass
+    def post(self, request):
+        charity_serializer = CharitySerializer(data=request.data)
+        
+        if charity_serializer.is_valid():
+            charity_serializer.save(user=request.user)
+            return Response(status=status.HTTP_201_CREATED)
+        
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class Tasks(generics.ListCreateAPIView):
