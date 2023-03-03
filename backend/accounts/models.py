@@ -23,3 +23,9 @@ class User(AbstractUser):
     @property
     def is_charity(self):
         return hasattr(self, 'charity')
+    
+    def create(self, validated_data):
+        user = User(**validated_data)
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
