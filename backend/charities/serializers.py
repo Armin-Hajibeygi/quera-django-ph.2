@@ -11,7 +11,9 @@ class BenefactorSerializer(serializers.ModelSerializer):
 
 
 class CharitySerializer(serializers.ModelSerializer):
-    pass
+    class Meta:
+        model = Charity
+        fields = ['name', 'reg_number']
 
 
 class TaskSerializer(serializers.ModelSerializer):
