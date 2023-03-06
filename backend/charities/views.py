@@ -75,7 +75,23 @@ class Tasks(generics.ListCreateAPIView):
 
 
 class TaskRequest(APIView):
-    pass
+    permission_classes = [IsAuthenticated, IsBenefactor]
+    
+    def get(self, request, task_id):
+        if Task.objects.filter(id=task_id).exists():
+            task = Task.objects.get(id=task_id)
+            
+            if (task.state != 'P'):
+                data={'detail': 'This task is not pending.'}
+                return Response(data, status=status.HTTP_404_NOT_FOUND)
+            
+            else:
+                task.assign_to_benefactor(request.user.benefactor)
+                data={'detail': 'Request sent.'}
+                return Response(data, status=status.HTTP_200_OK)
+        
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class TaskResponse(APIView):
